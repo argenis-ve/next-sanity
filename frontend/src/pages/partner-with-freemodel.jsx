@@ -54,7 +54,7 @@ export default function PartnerWithFreemodel({ data, footer }) {
           hero={{ title: data.title }}
           buttontext={data.titlebutton}
           image={urlFor(data.mainImage).url()}
-          buttonurl="/careers"
+          buttonurl="/payatclose"
         />
 
         {/* Text Block */}

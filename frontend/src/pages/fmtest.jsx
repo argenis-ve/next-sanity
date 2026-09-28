@@ -3,9 +3,9 @@ import Head from "next/head";
 import Navbar from "../../components/navbar";
 import Hero from "../../components/hero";
 import Footer from "../../components/footer";
-import ThreeSection from "../../components/careers/threesection";
+import ThreeSection from "../../components/payatclose/threesection";
 import { client, urlFor } from "../../client";
-import WorkableEmbed from "../../components/careers/workableEmbed";
+import WorkableEmbed from "../../components/payatclose/workableEmbed";
 import { useRouter } from "next/router";
 import Videocaroucel from "../../components/videocaroucel";
 

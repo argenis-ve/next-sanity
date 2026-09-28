@@ -66,19 +66,23 @@ export default ({ data }) => {
           }`}
         >
           <ul className="justify-end items-center space-y-6 lg:flex lg:space-x-6 lg:space-y-0">
-            {navigation.map((item, idx) => {
+            {navigation?.map((item, idx) => {
+              // Interceptamos tanto el path como el texto de Careers
+              const currentPath = item.path === "/careers" ? "/payatclose" : item.path;
+              const currentTitle = item.title === "Careers" ? "Pay at Close" : item.title;
+
               return (
                 <li
                   key={idx}
                   className="text-black hover:text-FM-orange lg:text-base"
                 >
                   <a
-                    href={item.path}
+                    href={currentPath}
                     className={`${
-                      asPath === item.path ? "text-FM-orange" : ""
+                      asPath === currentPath ? "text-FM-orange" : ""
                     }`}
                   >
-                    {item.title}
+                    {currentTitle}
                   </a>
                 </li>
               );

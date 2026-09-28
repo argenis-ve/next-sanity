@@ -5,6 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { client, urlFor } from "../../client";
 import Navbar from "../../components/navbar";
+import TrustpilotBanner from "../../components/trustpilotBanner"; // <-- Importación agregada
 import Hero from "../../components/hero";
 import Sixgrid from "../../components/index/sixgrid";
 import Rightleftright from "../../components/index/rightleftright";
@@ -31,7 +32,6 @@ export default function Home({ data, states, norcal, footer }) {
   // Get the current URL
   const router = useRouter();
   const currentURL = router.asPath;
-  
 
   return (
     <div>
@@ -55,12 +55,14 @@ export default function Home({ data, states, norcal, footer }) {
 
       <Navbar data={footer.navbar} />
 
+      {/* Banner de Trustpilot justo arriba de la portada */}
+      <TrustpilotBanner />
+
       <main>
         <Hero
           hero={data}
           buttontext={data.titlebutton}
           buttontext2={data.titlebutton2}
-          //buttonurl={data.buttonurl}
           buttonurl={"/request-estimate"}
           buttonurl2={data.buttonurl2}
           image={urlFor(data.mainImage).url()}
@@ -179,7 +181,7 @@ export const getStaticProps = async () => {
   
 }`);
 
-const norcal = await client.fetch(`*[_type == "states" && slug.current == "norcal"] {
+  const norcal = await client.fetch(`*[_type == "states" && slug.current == "norcal"] {
   "cities": *[
     _type == "cities" &&
     references(^._id) &&

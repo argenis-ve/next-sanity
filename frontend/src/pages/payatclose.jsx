@@ -1,19 +1,16 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 import Navbar from "../../components/navbar";
 import Hero from "../../components/hero";
 import Footer from "../../components/footer";
-import ThreeSection from "../../components/careers/threesection";
+import ThreeSection from "../../components/payatclose/threesection";
 import { client, urlFor } from "../../client";
-import WorkableEmbed from "../../components/careers/workableEmbed";
 import { useRouter } from "next/router";
 
 export default function Career({ data, footer }) {
-  let test;
-
   useEffect(() => {
-    let test = data.scriptform;
-  }, []);
+    let test = data?.scriptform;
+  }, [data]);
 
   // Get the current URL
   const router = useRouter();
@@ -22,14 +19,16 @@ export default function Career({ data, footer }) {
   return (
     <div>
       <Head>
-        <title>{`${data.title}`}</title>
-        <meta name="description" content={footer.description} />
+        <title>{data?.title || "Pay at Close | Freemodel"}</title>
+        <meta name="description" content={footer?.description} />
         <link rel="icon" href="/favicon.ico" />
 
         {/* Open Graph meta tags for social media sharing */}
         <meta property="og:title" content="Freemodel" />
-        <meta property="og:description" content={footer.description} />
-        <meta property="og:image" content={urlFor(footer.footerimage).url()} />
+        <meta property="og:description" content={footer?.description} />
+        {footer?.footerimage && (
+          <meta property="og:image" content={urlFor(footer.footerimage).url()} />
+        )}
         <meta
           property="og:url"
           content={`https://freemodel.com${currentURL}`}
@@ -37,31 +36,28 @@ export default function Career({ data, footer }) {
         <meta property="og:type" content="website" />
       </Head>
 
-      <Navbar data={footer.navbar} />
+      <Navbar data={footer?.navbar} />
 
       <main>
-        <Hero
-          hero={{ title: data.title }}
-          buttontext={data.titlebutton}
-          image={urlFor(data.mainImage).url()}
-        />
+        {data && (
+          <Hero
+            hero={{ title: data.title }}
+            buttontext={data.titlebutton}
+            image={data.mainImage ? urlFor(data.mainImage).url() : ""}
+          />
+        )}
 
-        <ThreeSection imageArray={data.imageArray} />
-
-        <h1 className="text-4xl text-center font-bold sm:text-5xl my-20">
-          We're Hiring!
-        </h1>
-        <div className="bg-white flex md:ml-16 overflow-auto">
-          <WorkableEmbed />
-        </div>
+        {data?.imageArray && <ThreeSection imageArray={data.imageArray} />}
       </main>
 
       <Footer data={footer} />
     </div>
   );
 }
+
 export const getStaticProps = async () => {
-  const mainquery = `*[_type == "careers"]{
+  // Apuntamos a "careers" que es donde Sanity guarda la información en la base de datos
+  const mainquery = `*[_type == "careers"][0]{
     title,
     mainImage {
       crop,
@@ -85,7 +81,7 @@ export const getStaticProps = async () => {
       text
     },
     scriptform
-  }[0]`;
+  }`;
 
   const footer = await client.fetch(`*[_type == "footersettings"][0]{
     footerimage {
@@ -110,8 +106,8 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      data,
-      footer,
+      data: data || null,
+      footer: footer || null,
     },
 
     revalidate: 10,
