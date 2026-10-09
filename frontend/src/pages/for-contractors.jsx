@@ -18,24 +18,21 @@ export default function ForContractors({ data, footer }) {
   const router = useRouter();
   const currentURL = router.asPath;
 
+  // Validación segura de imágenes
+  const heroImageUrl = data?.mainImage?.asset ? urlFor(data.mainImage).url() : "";
+  const seoImageUrl = data?.seoImage?.asset ? urlFor(data.seoImage).url() : "https://freemodel.com/SEODefaultLogo.png";
+
   return (
     <div>
       <Head>
         <title>{`For Contractors | Freemodel`}</title>
-        <meta name="description" content={footer.description} />
+        <meta name="description" content={footer?.description || ""} />
         <link rel="icon" href="/favicon.ico" />
 
         {/* Open Graph meta tags for social media sharing */}
-        <meta property="og:title" content={data?.seoTitle} />
-        <meta property="og:description" content={data?.seoDescription} />
-        {data?.seoImage ? (
-          <meta property="og:image" content={urlFor(data.seoImage).url()} />
-        ) : (
-          <meta
-            property="og:image"
-            content="https://freemodel.com/SEODefaultLogo.png"
-          />
-        )}
+        <meta property="og:title" content={data?.seoTitle || ""} />
+        <meta property="og:description" content={data?.seoDescription || ""} />
+        <meta property="og:image" content={seoImageUrl} />
         <meta
           property="og:url"
           content={`https://freemodel.com${currentURL}`}
@@ -44,67 +41,59 @@ export default function ForContractors({ data, footer }) {
         {/* END: Open Graph */}
       </Head>
 
-      <Navbar data={footer.navbar} />
+      <Navbar data={footer?.navbar} />
 
       <main>
         <Hero
-          hero={{ title: data.title }}
-          buttontext={data.titlebutton}
-          image={urlFor(data.mainImage).url()}
+          hero={{ title: data?.title }}
+          buttontext={data?.titlebutton}
+          image={heroImageUrl}
         />
-        <Bluebar body={data.bluebar} />
+        <Bluebar body={data?.bluebar} />
 
         {/* Text Block */}
 
-        <Paragraph text={data.body} />
+        <Paragraph text={data?.body} />
 
-        <Bluebar body={data.bluebar2} />
+        <Bluebar body={data?.bluebar2} />
 
         {/* <Threesegment /> */}
 
-        {/* <Sixgrid title={data.sec2title} imageArray={data.sec2imageArray} /> */}
+        {/* <Sixgrid title={data?.sec2title} imageArray={data?.sec2imageArray} /> */}
 
-        <TwoByTwo title={data.sec2title} items={data.sec2imageArray} />
+        <TwoByTwo title={data?.sec2title} items={data?.sec2imageArray} />
 
         {/* <Quoteslider
           title="Kudos from clients"
-          testimonials={data.testimonials}
+          testimonials={data?.testimonials}
         /> */}
 
         <ThreeSegment
-          title={data.testimonialstitle}
-          testimonials={data.testimonials}
+          title={data?.testimonialstitle}
+          testimonials={data?.testimonials}
         />
 
         <h1 className="text-4xl text-center font-bold my-20">
-          {data.sec3title}
+          {data?.sec3title}
         </h1>
-
-        {/* <div className="bg-stone-500 h-96 flex items-center justify-center">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: data.sec3html,
-            }}
-          />
-        </div> */}
 
         <div className="flex items-center justify-center overflow-auto">
           <div
             className="pb-10 overflow-auto"
             dangerouslySetInnerHTML={{
-              __html: data.sec3html,
+              __html: data?.sec3html || "",
             }}
           />
         </div>
 
         <h1 className="text-4xl text-center max-w-4xl mx-auto font-bold my-20">
-          {data.sec4title}
+          {data?.sec4title}
         </h1>
         <div className="flex-auto max-w-3xl justify-center items-center mx-auto px-5">
           <div
             className="pb-10 overflow-auto"
             dangerouslySetInnerHTML={{
-              __html: data.sec4html,
+              __html: data?.sec4html || "",
             }}
           />
         </div>
@@ -166,8 +155,8 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      data,
-      footer,
+      data: data || {},
+      footer: footer || {},
     },
 
     revalidate: 10,
