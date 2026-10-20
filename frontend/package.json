@@ -28,7 +28,7 @@
     "jquery": "^3.7.0",
     "keen-slider": "^6.8.5",
     "lucide-react": "^0.460.0",
-    "next": "^15.0.3",
+    "next": "^16.4.2",
     "next-page-layout": "^1.0.3",
     "next-sanity": "^4.3.3",
     "next-sitemap": "^4.2.3",
