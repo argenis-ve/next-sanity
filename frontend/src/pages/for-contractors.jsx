@@ -13,14 +13,32 @@ import ThreeSegment from "../../components/threesegment";
 import { useRouter } from "next/router";
 import TwoByTwo from "../../components/index/twobytwo";
 
+// Función a prueba de errores para procesar cualquier imagen de Sanity
+const safeUrlFor = (source) => {
+  if (!source || (!source.asset && !source._ref)) {
+    return "https://freemodel.com/SEODefaultLogo.png";
+  }
+  try {
+    return urlFor(source).url() || "https://freemodel.com/SEODefaultLogo.png";
+  } catch (e) {
+    return "https://freemodel.com/SEODefaultLogo.png";
+  }
+};
+
 export default function ForContractors({ data, footer }) {
   // Get the current URL
   const router = useRouter();
   const currentURL = router.asPath;
 
-  // Validación segura de imágenes
-  const heroImageUrl = data?.mainImage?.asset ? urlFor(data.mainImage).url() : "";
-  const seoImageUrl = data?.seoImage?.asset ? urlFor(data.seoImage).url() : "https://freemodel.com/SEODefaultLogo.png";
+  // Validación ultra-segura de imágenes
+  const heroImageUrl = safeUrlFor(data?.mainImage);
+  const seoImageUrl = safeUrlFor(data?.seoImage);
+
+  // Asegurar que las imágenes dentro de los testimonios no rompan si vienen vacías
+  const safeTestimonials = data?.testimonials?.map((t) => ({
+    ...t,
+    testimonialimage: t?.testimonialimage?.asset ? t.testimonialimage : null,
+  })) || [];
 
   return (
     <div>
@@ -57,20 +75,11 @@ export default function ForContractors({ data, footer }) {
 
         <Bluebar body={data?.bluebar2} />
 
-        {/* <Threesegment /> */}
-
-        {/* <Sixgrid title={data?.sec2title} imageArray={data?.sec2imageArray} /> */}
-
         <TwoByTwo title={data?.sec2title} items={data?.sec2imageArray} />
-
-        {/* <Quoteslider
-          title="Kudos from clients"
-          testimonials={data?.testimonials}
-        /> */}
 
         <ThreeSegment
           title={data?.testimonialstitle}
-          testimonials={data?.testimonials}
+          testimonials={safeTestimonials}
         />
 
         <h1 className="text-4xl text-center font-bold my-20">
