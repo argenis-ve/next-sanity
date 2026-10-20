@@ -84,7 +84,7 @@ export const myStructure = (S, context) =>
           item.getId() !== 'faqpage' &&
           item.getId() !== 'mediapage' &&
           item.getId() !== 'aboutus' &&
-          item.getId() !== 'careers' &&
+          item.getId() !== 'payatclose' &&
           item.getId() !== 'privacypolicy' &&
           item.getId() !== 'forcontractors' &&
           item.getId() !== 'letstalk' &&
@@ -120,11 +120,11 @@ export const myStructure = (S, context) =>
         .icon(FaFileAlt)
         .child(S.document().schemaType('blogpage').documentId('blogpage')),
 
-      // Careers
+      // Pay at Close
       S.listItem()
-        .title('Careers')
+        .title('Pay at Close')
         .icon(FaFileAlt)
-        .child(S.document().schemaType('careers').documentId('careers')),
+        .child(S.document().schemaType('payatclose').documentId('payatclose')),
 
       // Design Services
       S.listItem()

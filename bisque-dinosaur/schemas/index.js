@@ -18,7 +18,7 @@ import designservices from './singletons/design-services'
 import faqpage from './singletons/faq'
 import mediapage from './singletons/mediapage'
 import aboutus from './singletons/aboutus'
-import careers from './singletons/careers'
+import payatclose from './singletons/payatclose'
 import privacypolicy from './singletons/privacypolicy'
 import forcontractors from './singletons/for-contractors'
 import letstalk from './singletons/lets-talk'
@@ -58,7 +58,7 @@ export const schemaTypes = [
   faqpage,
   mediapage,
   aboutus,
-  careers,
+  payatclose,
   reviews,
   privacypolicy,
   forcontractors,

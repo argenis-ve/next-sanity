@@ -1,8 +1,8 @@
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export default defineType({
-  name: 'careers',
-  title: 'Careers',
+  name: 'payatclose',
+  title: 'Pay at Close',
   type: 'document',
 
   // Uncomment below to have edits publish automatically as you type
