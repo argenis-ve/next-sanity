@@ -13,7 +13,7 @@ import ThreeSegment from "../../components/threesegment";
 import { useRouter } from "next/router";
 import TwoByTwo from "../../components/index/twobytwo";
 
-// Función a prueba de errores para procesar cualquier imagen de Sanity
+// Helper universal y a prueba de fallos para urlFor
 const safeUrlFor = (source) => {
   if (!source || (!source.asset && !source._ref)) {
     return "https://freemodel.com/SEODefaultLogo.png";
@@ -26,19 +26,31 @@ const safeUrlFor = (source) => {
 };
 
 export default function ForContractors({ data, footer }) {
-  // Get the current URL
   const router = useRouter();
   const currentURL = router.asPath;
 
-  // Validación ultra-segura de imágenes
+  // 1. Imágenes seguras para Hero y SEO
   const heroImageUrl = safeUrlFor(data?.mainImage);
   const seoImageUrl = safeUrlFor(data?.seoImage);
 
-  // Asegurar que las imágenes dentro de los testimonios no rompan si vienen vacías
-  const safeTestimonials = data?.testimonials?.map((t) => ({
-    ...t,
-    testimonialimage: t?.testimonialimage?.asset ? t.testimonialimage : null,
-  })) || [];
+  // 2. Mapeo seguro para el arreglo de TwoByTwo / sec2imageArray
+  const safeItems = Array.isArray(data?.sec2imageArray)
+    ? data.sec2imageArray.map((item) => {
+        if (!item) return { url: "https://freemodel.com/SEODefaultLogo.png" };
+        // Si el ítem es directamente una imagen o contiene una propiedad de imagen
+        return item.asset || item._ref
+          ? { ...item, url: safeUrlFor(item) }
+          : item;
+      })
+    : [];
+
+  // 3. Testimonios seguros
+  const safeTestimonials = Array.isArray(data?.testimonials)
+    ? data.testimonials.map((t) => ({
+        ...t,
+        testimonialimage: t?.testimonialimage?.asset ? t.testimonialimage : null,
+      }))
+    : [];
 
   return (
     <div>
@@ -47,7 +59,7 @@ export default function ForContractors({ data, footer }) {
         <meta name="description" content={footer?.description || ""} />
         <link rel="icon" href="/favicon.ico" />
 
-        {/* Open Graph meta tags for social media sharing */}
+        {/* Open Graph meta tags */}
         <meta property="og:title" content={data?.seoTitle || ""} />
         <meta property="og:description" content={data?.seoDescription || ""} />
         <meta property="og:image" content={seoImageUrl} />
@@ -56,7 +68,6 @@ export default function ForContractors({ data, footer }) {
           content={`https://freemodel.com${currentURL}`}
         />
         <meta property="og:type" content="website" />
-        {/* END: Open Graph */}
       </Head>
 
       <Navbar data={footer?.navbar} />
@@ -69,13 +80,11 @@ export default function ForContractors({ data, footer }) {
         />
         <Bluebar body={data?.bluebar} />
 
-        {/* Text Block */}
-
         <Paragraph text={data?.body} />
 
         <Bluebar body={data?.bluebar2} />
 
-        <TwoByTwo title={data?.sec2title} items={data?.sec2imageArray} />
+        <TwoByTwo title={data?.sec2title} items={safeItems} />
 
         <ThreeSegment
           title={data?.testimonialstitle}
